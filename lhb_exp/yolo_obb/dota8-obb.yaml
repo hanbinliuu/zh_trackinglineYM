@@ -1,0 +1,8 @@
+
+path: C:\Users\lhb\Desktop\labelTxt # dataset root dir
+train: images\train
+val: images\val
+#test: images/test
+names:
+  0: line
+  1: cross

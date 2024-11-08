@@ -1,0 +1,26 @@
+request_flag: 2
+default_image_path: test_img\Image_20240309153122830.bmp
+#yolo: config\best.pt
+yolo: C:\Users\lhb\Desktop\zh_trackingposition\lhb_exp\yolo_obb\best.pt
+frequency: 5
+lens2head_distance: 0
+vision_move_speed: 0
+
+# 桁架参数
+vision_move_to_location: 600
+vision_move_compensate: 55
+pulse_distance_coefficient: 121
+
+current_move_speed: 0
+current_location: 0
+v_to_h: 10
+deformation_x: 0.2
+target_offset: 0
+global_x: 0
+global_y: 0
+global_distance: 0
+part_distance: 0
+width_target: 0
+angle_yaw: 0
+width_yaw: 0
+border_percent: 0.45

@@ -1,0 +1,74 @@
+syntax = "proto3";
+
+
+service ZhongheTracking{
+    // 给出查询标记flag，给出记录时间戳，给出当前图像流，给出移动速度、当前行架位置，给出全局坐标、里程、局部里程。
+    // 返回当前位置与否进行操作的结果。
+    // 【算法--->软件】 + 【软件--->算法】
+    rpc TrackingOperation(TrackingRequest)returns(TrackingResponse);
+
+}
+
+message TrackingRequest{
+    int32 request_flag = 1;
+
+    double timestamp = 2;                    // 当前获得数据时的时间戳
+                                            // 软件根据此时间戳，取数据进行返回
+
+    bytes image = 3;                        // 当前帧的图像输出流
+    // 当前视觉引导的行架控制
+    float vision_move_speed = 4;            // 使用速度控制，速度参数输出，行进方向向左偏移为-，向右为+
+    float vision_move_to_location = 5;      // 使用位置控制，位置参数输出
+
+    // 当前陀螺仪，里程计引导的小车定位
+    float global_x = 6;                     // 在地图中小车的全局坐标x
+    float global_y = 7;                     // 在地图中小车的全局坐标y
+    float global_distance = 8;              // 在地图中小车的已行动距离
+    float part_distance = 9;                // 从焊缝开始计算，小车在单条焊缝检测循迹中的已行动距离
+
+    float width_target = 10;                // 图像中焊缝宽度
+
+    float angle_yaw = 11;              // 角度偏航
+    float width_yaw = 12;              // 单轴运动平台偏航，行进方向向左偏移为-，向右为+。
+    int32 reset_flag = 13;                     // 重置标记
+
+}
+
+// float last_odometer = 13;
+//    int32 angle_yaw_flag = 11;              // 角度偏航信号
+//    int32 width_yaw_flag = 12;              // 单轴运动平台偏航信号
+
+
+message TrackingResponse{
+    int32 response_flag = 1;
+
+    float timestamp = 2;                    // 当前获得数据时的时间戳
+
+    float current_move_speed = 3;           // 当前行架行进速度
+    float current_location = 4;             // 当前行架位置
+    float target_offset = 5;                // 以焊缝中心为标准，焊缝检测循迹时的偏移量，行进方向向左偏移为-，向右为+。
+
+
+    float global_x = 6;                     // 焊缝开始检测时的重置坐标-全局坐标x
+    float global_y = 7;                     // 焊缝开始检测时的重置坐标-全局坐标y
+    float global_distance = 8;              // 预留位
+    float part_distance = 9;                // 焊缝开始检测时的重置坐标-距离0
+
+    repeated float gyroscope_x = 10;        // 上一时刻到当前时刻的陀螺仪角度（弧度）列表
+    repeated float gyroscope_y = 11;        // 上一时刻到当前时刻的陀螺仪角度（弧度）列表
+    repeated float gyroscope_z = 12;        // 上一时刻到当前时刻的陀螺仪角度（弧度）列表
+    repeated float roll = 13;               // 上一时刻到当前时刻的陀螺仪角度（弧度）列表
+    repeated float pitch = 14;              // 上一时刻到当前时刻的陀螺仪角度（弧度）列表
+    repeated float heading = 15;            // 上一时刻到当前时刻的陀螺仪角度（弧度）列表
+
+    float width_target = 16;                // 焊缝宽度（预存）
+    repeated float odometer = 17;         // 上一时刻到当前时刻的里程计距离列表
+    float last_odometer = 18;
+    int32 reset_flag = 19;              // 重置标记
+    float vision_move_to_location = 20;      // 使用位置控制，位置参数输出
+}
+
+
+//    float last_odometer = 18;
+
+//    int32 part_init_flag = 5;       // 焊缝开始检测时的局部信息初始化flag
