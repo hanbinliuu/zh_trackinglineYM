@@ -44,59 +44,59 @@ def rotation_warnings(heading_data, last_heading_data):
     return False
 
 
-def position_calculate(start_point, heading_data, last_odometer_data, origin_point):
-    """ 计算单步位置信息 """
-
-    global delta_x, delta_y
-    if len(last_odometer_data) == 1:
-        diff_ododata = 0
-    else:
-        diff_ododata = last_odometer_data[-1] - last_odometer_data[-2]
-
-    # 小车前进
-    if 0 <= heading_data < 90 and diff_ododata >= 0:
-        delta_x = -diff_ododata * math.cos(math.radians(heading_data))
-        delta_y = diff_ododata * math.sin(math.radians(heading_data))
-
-    if 90 <= heading_data < 180 and diff_ododata >= 0:
-        delta_x = diff_ododata * math.cos(math.radians(180 - heading_data))
-        delta_y = diff_ododata * math.sin(math.radians(180 - heading_data))
-
-    if 180 <= heading_data < 270 and diff_ododata >= 0:
-        delta_x = diff_ododata * math.cos(math.radians(heading_data - 180))
-        delta_y = -diff_ododata * math.sin(math.radians(heading_data - 180))
-
-    if 270 <= heading_data < 360 and diff_ododata >= 0:
-        delta_x = -diff_ododata * math.cos(math.radians(360 - heading_data))
-        delta_y = -diff_ododata * math.sin(math.radians(360 - heading_data))
-
-    # 小车回退
-    if (0 <= heading_data < 90) and diff_ododata < 0:
-        delta_x = -diff_ododata * math.cos(math.radians(heading_data))
-        delta_y = diff_ododata * math.sin(math.radians(heading_data))
-
-    if 90 <= heading_data < 180 and diff_ododata < 0:
-        delta_x = diff_ododata * math.cos(math.radians(180 - heading_data))
-        delta_y = diff_ododata * math.sin(math.radians(180 - heading_data))
-
-    if 180 <= heading_data < 270 and diff_ododata < 0:
-        delta_x = diff_ododata * math.cos(math.radians(heading_data - 180))
-        delta_y = -diff_ododata * math.sin(math.radians(heading_data - 180))
-
-    if 270 <= heading_data < 360 and diff_ododata < 0:
-        delta_x = -diff_ododata * math.cos(math.radians(360 - heading_data))
-        delta_y = -diff_ododata * math.sin(math.radians(360 - heading_data))
-
-    # 更新位置
-    position = [start_point[0] + delta_x, start_point[1] + delta_y]
-    # 计算distance
-    distance = distance_between_points(position[0], position[1], origin_point[0], origin_point[1])
-
-    print('此时里程计数据:', last_odometer_data[-1], '上一时刻里程计数据:', last_odometer_data[-2], '里程差:',
-          diff_ododata)
-    print('小车起点:', [round(x, 2) for x in start_point], '小车终点:', [round(x, 2) for x in position],
-          'part_distance:', round(distance, 2))
-    return distance, position
+# def position_calculate(start_point, heading_data, last_odometer_data, origin_point):
+#     """ 计算单步位置信息 """
+#
+#     global delta_x, delta_y
+#     if len(last_odometer_data) == 1:
+#         diff_ododata = 0
+#     else:
+#         diff_ododata = last_odometer_data[-1] - last_odometer_data[-2]
+#
+#     # 小车前进
+#     if 0 <= heading_data < 90 and diff_ododata >= 0:
+#         delta_x = -diff_ododata * math.cos(math.radians(heading_data))
+#         delta_y = diff_ododata * math.sin(math.radians(heading_data))
+#
+#     if 90 <= heading_data < 180 and diff_ododata >= 0:
+#         delta_x = diff_ododata * math.cos(math.radians(180 - heading_data))
+#         delta_y = diff_ododata * math.sin(math.radians(180 - heading_data))
+#
+#     if 180 <= heading_data < 270 and diff_ododata >= 0:
+#         delta_x = diff_ododata * math.cos(math.radians(heading_data - 180))
+#         delta_y = -diff_ododata * math.sin(math.radians(heading_data - 180))
+#
+#     if 270 <= heading_data < 360 and diff_ododata >= 0:
+#         delta_x = -diff_ododata * math.cos(math.radians(360 - heading_data))
+#         delta_y = -diff_ododata * math.sin(math.radians(360 - heading_data))
+#
+#     # 小车回退
+#     if (0 <= heading_data < 90) and diff_ododata < 0:
+#         delta_x = -diff_ododata * math.cos(math.radians(heading_data))
+#         delta_y = diff_ododata * math.sin(math.radians(heading_data))
+#
+#     if 90 <= heading_data < 180 and diff_ododata < 0:
+#         delta_x = diff_ododata * math.cos(math.radians(180 - heading_data))
+#         delta_y = diff_ododata * math.sin(math.radians(180 - heading_data))
+#
+#     if 180 <= heading_data < 270 and diff_ododata < 0:
+#         delta_x = diff_ododata * math.cos(math.radians(heading_data - 180))
+#         delta_y = -diff_ododata * math.sin(math.radians(heading_data - 180))
+#
+#     if 270 <= heading_data < 360 and diff_ododata < 0:
+#         delta_x = -diff_ododata * math.cos(math.radians(360 - heading_data))
+#         delta_y = -diff_ododata * math.sin(math.radians(360 - heading_data))
+#
+#     # 更新位置
+#     position = [start_point[0] + delta_x, start_point[1] + delta_y]
+#     # 计算distance
+#     distance = distance_between_points(position[0], position[1], origin_point[0], origin_point[1])
+#
+#     print('此时里程计数据:', last_odometer_data[-1], '上一时刻里程计数据:', last_odometer_data[-2], '里程差:',
+#           diff_ododata)
+#     print('小车起点:', [round(x, 2) for x in start_point], '小车终点:', [round(x, 2) for x in position],
+#           'part_distance:', round(distance, 2))
+#     return distance, position
 
 
 def quadrant_judgement(heading_data):
